@@ -9,5 +9,6 @@
     <string name="enter_your_email">Email</string>
     <string name="secret_code">secret code</string>
     <string name="TermsNconditons">By clicking \"Sign Up\" button, your are creating an \n account, and you agree to the Terms of Use.</string>
+    <string name="forgot_your_password">Forgot your password?</string>
 
 </resources>
