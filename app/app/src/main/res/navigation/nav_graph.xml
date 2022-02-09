@@ -10,4 +10,9 @@
         android:name="com.srj.commentapp.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" />
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.srj.commentapp.SignupFragment"
+        android:label="fragment_signup"
+        tools:layout="@layout/fragment_signup" />
 </navigation>
