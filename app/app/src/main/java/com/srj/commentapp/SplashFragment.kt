@@ -1,10 +1,12 @@
 package com.srj.commentapp
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +37,21 @@ class SplashFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_splash, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        Handler().postDelayed(
+            {
+
+                val navDirections = SplashFragmentDirections.actionSplashFragmentToSignupFragment()
+                findNavController().navigate(navDirections)
+
+            }, 3000
+
+        )
+
     }
 
     companion object {
