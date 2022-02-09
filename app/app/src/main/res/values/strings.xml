@@ -2,4 +2,12 @@
     <string name="app_name">Comment App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="already_have_android_account">Already have an account?</string>
+    <string name="Password">password</string>
+    <string name="enter_your_email">Email</string>
+    <string name="secret_code">secret code</string>
+    <string name="TermsNconditons">By clicking \"Sign Up\" button, your are creating an \n account, and you agree to the Terms of Use.</string>
+
 </resources>
