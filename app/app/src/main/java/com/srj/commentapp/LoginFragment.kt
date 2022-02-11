@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -44,6 +45,12 @@ class LoginFragment : Fragment() {
 
         val signup = view.findViewById<TextView>(R.id.tv_signIn)
         val forgotPassword = view.findViewById<TextView>(R.id.tv_forgotPassword)
+        val btnLogin = view.findViewById<Button>(R.id.btn_signIn)
+
+
+        btnLogin.setOnClickListener {
+            navigateToHomePage()
+        }
 
         signup.setOnClickListener {
             navigateToSignup()
@@ -51,6 +58,11 @@ class LoginFragment : Fragment() {
         forgotPassword.setOnClickListener {
             navigateToForgotPassword()
         }
+    }
+
+    private fun navigateToHomePage() {
+        val directions = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
+        findNavController().navigate(directions)
     }
 
     private fun navigateToForgotPassword() {

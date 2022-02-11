@@ -11,5 +11,8 @@
     <string name="TermsNconditons">By clicking \"Sign Up\" button, your are creating an \n account, and you agree to the Terms of Use.</string>
     <string name="forgot_your_password">Forgot your password?</string>
     <string name="forgot_password">Forgot Password</string>
+    <string name="comments">What would you like to share with the world?</string>
+    <string name="username">username</string>
+    <string name="this_is_some_random_comment">this is some random comment</string>
 
 </resources>
