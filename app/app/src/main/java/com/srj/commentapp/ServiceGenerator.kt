@@ -13,7 +13,7 @@ interface ServiceGenerator {
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create()
     val baseUrl: String
-        get() = "https://comments-app-api.deta.dev/"
+        get() = "https://comments-api.deta.dev/"
     val retrofit: Retrofit
         get() = Retrofit.Builder()
             .baseUrl(baseUrl)
