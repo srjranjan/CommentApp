@@ -1,5 +1,6 @@
 package com.srj.commentapp
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
@@ -80,6 +81,7 @@ class SignupFragment : Fragment(), ServiceGenerator {
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun submitSignUp(
         et_email: TextInputEditText,
         et_password: TextInputEditText,
@@ -88,6 +90,7 @@ class SignupFragment : Fragment(), ServiceGenerator {
         passBox: TextInputLayout,
         secretBox: TextInputLayout
     ) {
+
         val email = et_email.text.toString()
         val password = et_password.text.toString()
         val secretCode = et_secretCode.text.toString()
@@ -99,16 +102,18 @@ class SignupFragment : Fragment(), ServiceGenerator {
 
 
                 } else {
-                    secretBox.boxStrokeErrorColor = ColorStateList.valueOf(0xFF0000)
+                    secretBox.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
+                    secretBox.error = "PLease enter secret code"
                 }
             } else {
-                passBox.boxStrokeErrorColor = ColorStateList.valueOf(0xFF0000)
+                passBox.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
+                passBox.error = "Please enter password"
             }
 
 
         } else {
-            emailBox.boxStrokeErrorColor = ColorStateList.valueOf(0xFF0000)
-
+            emailBox.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
+            emailBox.error = "Please enter email"
         }
 
     }
@@ -122,21 +127,26 @@ class SignupFragment : Fragment(), ServiceGenerator {
 
         val jsonOBjectString = json.toString()
         val requestBody = jsonOBjectString.toRequestBody("application/json".toMediaTypeOrNull())
+        progressBar.isActivated = true
         progressBar.visibility = View.VISIBLE
 
         CoroutineScope(Dispatchers.IO).launch {
             // Do the POST request and get response
             try {
                 val response = service.signup(requestBody)
-                // progressBar.visibility = View.VISIBLE
+
+
 
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        handleData(responseBody)
                         progressBar.visibility = View.GONE
-                        Toast.makeText(view?.context, "Submitted", Toast.LENGTH_SHORT).show()
-                        val directions =
-                            SignupFragmentDirections.actionSignupFragmentToHomeFragment()
-                        findNavController().navigate(directions)
+                        Toast.makeText(view?.context, response.body()?.message, Toast.LENGTH_SHORT)
+                            .show()
+//                        val directions =
+//                            SignupFragmentDirections.actionSignupFragmentToHomeFragment()
+//                        findNavController().navigate(directions)
                     } else {
                         Toast.makeText(view?.context, response.message(), Toast.LENGTH_SHORT).show()
                     }
@@ -150,6 +160,13 @@ class SignupFragment : Fragment(), ServiceGenerator {
         //val response = service.signup(requestBody)
 
 
+    }
+
+    private fun handleData(responseBody: responseMessage?) {
+        if (responseBody != null) {
+            val message = responseBody.message
+            Log.d("signup", message)
+        }
     }
 
     private fun navigateToSignIn() {
