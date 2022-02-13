@@ -3,18 +3,17 @@ package com.srj.commentapp
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT
+import com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE
+import com.srj.commentapp.databinding.FragmentSignupBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,9 +33,10 @@ private const val ARG_PARAM2 = "param2"
  * Use the [SignupFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SignupFragment : Fragment(), ServiceGenerator {
+class SignupFragment : Fragment(), ServiceGenerator, Encryption {
+    val secretKey = "S#84naJD8a98(HD8"
 
-    lateinit var progressBar: ProgressBar
+    private lateinit var binding: FragmentSignupBinding
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -53,82 +53,115 @@ class SignupFragment : Fragment(), ServiceGenerator {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_signup, container, false)
+        binding = FragmentSignupBinding.inflate(layoutInflater)
+        return (binding.root)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tv_signIn = view.findViewById<TextView>(R.id.tv_signIn)
-        val et_email = view.findViewById<TextInputEditText>(R.id.Email)
-        val et_password = view.findViewById<TextInputEditText>(R.id.password)
-        val et_secretCode = view.findViewById<TextInputEditText>(R.id.secretCode)
-        val emailBox = view.findViewById<TextInputLayout>(R.id.textInputLayout)
-        val passBox = view.findViewById<TextInputLayout>(R.id.textInputLayout2)
-        val secretBox = view.findViewById<TextInputLayout>(R.id.textInputLayout3)
-        progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
-
-        tv_signIn.setOnClickListener {
+        binding.tvSignIn.setOnClickListener {
             navigateToSignIn()
         }
 
-        val btn_signIn = view.findViewById<Button>(R.id.btn_signup)
 
-        btn_signIn.setOnClickListener {
-            submitSignUp(et_email, et_password, et_secretCode, emailBox, passBox, secretBox)
+        binding.btnSignup.setOnClickListener {
+
+            submitSignUp()
         }
     }
 
     @SuppressLint("ResourceAsColor")
-    private fun submitSignUp(
-        et_email: TextInputEditText,
-        et_password: TextInputEditText,
-        et_secretCode: TextInputEditText,
-        emailBox: TextInputLayout,
-        passBox: TextInputLayout,
-        secretBox: TextInputLayout
-    ) {
+    private fun submitSignUp() {
+        deActivateIputation()
 
-        val email = et_email.text.toString()
-        val password = et_password.text.toString()
-        val secretCode = et_secretCode.text.toString()
-        if (email.isNotEmpty()) {
-            if (password.isNotEmpty()) {
+        val email = binding.Email.text.toString()
+        var password = binding.password.text.toString()
+        var secretCode = binding.secretCode.text.toString()
 
-                if (secretCode.isNotEmpty()) {
-                    sendtoserver(email, password, secretCode)
+        when {
+            email.isBlank() -> {
+                binding.textInputLayout.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
+                binding.textInputLayout.error = "Please enter email"
+                activateIputation()
 
-
-                } else {
-                    secretBox.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
-                    secretBox.error = "PLease enter secret code"
-                }
-            } else {
-                passBox.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
-                passBox.error = "Please enter password"
+                Handler().postDelayed(
+                    {
+                        binding.textInputLayout.boxStrokeErrorColor =
+                            ColorStateList.valueOf(R.color.teal_200)
+                        binding.textInputLayout.error = null
+                        binding.textInputLayout.endIconMode = END_ICON_CLEAR_TEXT
+                    }, 5000
+                )
             }
+            password.isBlank() -> {
+                binding.textInputLayout2.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
+                binding.textInputLayout2.error = "Please enter password"
+                activateIputation()
+                Handler().postDelayed(
+                    {
+                        binding.textInputLayout2.boxStrokeErrorColor =
+                            ColorStateList.valueOf(R.color.teal_200)
+                        binding.textInputLayout2.error = null
+                        binding.textInputLayout2.endIconMode = END_ICON_PASSWORD_TOGGLE
+                    }, 5000
+                )
+            }
+            secretCode.isBlank() -> {
+                binding.textInputLayout3.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
+                binding.textInputLayout3.error = "PLease enter secret code"
+                activateIputation()
+                Handler().postDelayed(
+                    {
+                        binding.textInputLayout3.boxStrokeErrorColor =
+                            ColorStateList.valueOf(R.color.teal_200)
+                        binding.textInputLayout3.error = null
+                        binding.textInputLayout3.endIconMode = END_ICON_PASSWORD_TOGGLE
+                    }, 5000
+                )
 
+            }
+            else -> {
+//                val decryptedText = encryption.decrypt(secretKey,"17f1c612c0d5fd97d519f6038810d048")
+//                binding.userExist.text=decryptedText.toString()
+//                  password = encryption.encrypt(secretKey,password).toString()
+//                  secretCode=encryption.encrypt(secretKey,secretCode).toString()
+                //sendToServer(email, password, secretCode)
 
-        } else {
-            emailBox.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
-            emailBox.error = "Please enter email"
+            }
         }
+
 
     }
 
-    private fun sendtoserver(email: String, password: String, secretCode: String) {
+    private fun deActivateIputation() {
+        binding.textInputLayout.isEnabled = false
+        binding.textInputLayout2.isEnabled = false
+        binding.textInputLayout3.isEnabled = false
+        binding.btnSignup.isEnabled = false
+    }
+
+    private fun activateIputation() {
+        binding.textInputLayout.isEnabled = true
+        binding.textInputLayout2.isEnabled = true
+        binding.textInputLayout3.isEnabled = true
+        binding.btnSignup.isEnabled = true
+    }
+
+    private fun sendToServer(email: String, password: String, secretCode: String) {
         val service = retrofit.create(APIservice::class.java)
         val json = JSONObject()
         json.put("email", email)
         json.put("password", password)
         json.put("secretCode", secretCode)
+        json.put("isLogged", true)
 
         val jsonOBjectString = json.toString()
         val requestBody = jsonOBjectString.toRequestBody("application/json".toMediaTypeOrNull())
-        progressBar.isActivated = true
-        progressBar.visibility = View.VISIBLE
+        binding.progressBar.isActivated = true
+        binding.progressBar.visibility = View.VISIBLE
 
         CoroutineScope(Dispatchers.IO).launch {
             // Do the POST request and get response
@@ -139,15 +172,11 @@ class SignupFragment : Fragment(), ServiceGenerator {
 
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        handleData(responseBody)
-                        progressBar.visibility = View.GONE
-                        Toast.makeText(view?.context, response.body()?.message, Toast.LENGTH_SHORT)
-                            .show()
-//                        val directions =
-//                            SignupFragmentDirections.actionSignupFragmentToHomeFragment()
-//                        findNavController().navigate(directions)
+
+                        handleData(response.body())
+
                     } else {
+
                         Toast.makeText(view?.context, response.message(), Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -156,16 +185,27 @@ class SignupFragment : Fragment(), ServiceGenerator {
             }
         }
 
-
-        //val response = service.signup(requestBody)
-
-
     }
 
     private fun handleData(responseBody: responseMessage?) {
         if (responseBody != null) {
-            val message = responseBody.message
-            Log.d("signup", message)
+            if (responseBody.message == "User already exists") {
+                binding.userExist.text = getString(R.string.userExist)
+                binding.userExist.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
+
+                activateIputation()
+
+            } else {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(view?.context, responseBody.message, Toast.LENGTH_SHORT)
+                    .show()
+                val directions =
+                    SignupFragmentDirections.actionSignupFragmentToHomeFragment()
+                findNavController().navigate(directions)
+
+            }
+
         }
     }
 

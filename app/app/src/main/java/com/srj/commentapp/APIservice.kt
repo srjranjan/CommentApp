@@ -13,19 +13,19 @@ interface APIservice {
     suspend fun signup(@Body request: RequestBody): Response<responseMessage>
 
     @POST("/auth/login")
-    fun login(@Body request: RequestBody): Response<ResponseBody>
+    suspend fun login(@Body request: RequestBody): Response<responseMessage>
 
     @POST("/auth/logout")
-    fun logout(@Body request: RequestBody): Response<ResponseBody>
+    suspend fun logout(@Body request: RequestBody): Response<ResponseBody>
 
     @POST("/auth/forgot-password")
-    fun forgotPassword(@Body request: RequestBody): Response<ResponseBody>
+    suspend fun forgotPassword(@Body request: RequestBody): Response<ResponseBody>
 
     @POST("/post-comment")
-    fun submitComment(@Body request: RequestBody): Response<ResponseBody>
+    suspend fun submitComment(@Body request: RequestBody): Response<ResponseBody>
 
     @GET("/view-comments")
-    fun viewComment(): Response<List<CommentModal>>
+    suspend fun viewComment(): Response<List<CommentModal>>
 
 
 }
