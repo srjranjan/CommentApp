@@ -1,12 +1,16 @@
 package com.srj.commentapp
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +26,16 @@ class SplashFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    // creating constant keys for shared preferences.
+    private val SHARED_PREFS = "shared_prefs"
+
+    // key for storing email.
+    private val EMAIL_KEY = "email_key"
+
+    // variable for shared preferences.
+    private var sharedpreferences: SharedPreferences? = null
+    private var email: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,18 +55,29 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedpreferences = view.context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+
+        email = sharedpreferences?.getString(EMAIL_KEY, null).toString()
+        Log.d("sharedPref", email)
 
         Handler().postDelayed(
             {
 
-                val navDirections = SplashFragmentDirections.actionSplashFragmentToSignupFragment()
-                findNavController().navigate(navDirections)
+                if (email == "null") {
+                    val directions = SplashFragmentDirections.actionSplashFragmentToSignupFragment()
+                    findNavController().navigate(directions)
+                } else {
+                    val directions = SplashFragmentDirections.actionSplashFragmentToHomeFragment()
+                    findNavController().navigate(directions)
 
+                }
             }, 3000
 
         )
 
+
     }
+
 
     companion object {
         /**
