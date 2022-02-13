@@ -1,7 +1,10 @@
 package com.srj.commentapp
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.ColorStateList
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -9,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT
@@ -34,7 +38,21 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SignupFragment : Fragment(), ServiceGenerator, Encryption {
-    val secretKey = "S#84naJD8a98(HD8"
+    var secretKey = "R#Q9DtjzHMFen&C*"
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    var encodedBase64Key: String = Encryption.encodeKey(secretKey)
+    val SHARED_PREFS = "shared_prefs"
+
+    // key for storing email.
+    val EMAIL_KEY = "email_key"
+
+    // key for storing password.
+    val PASSWORD_KEY = "password_key"
+
+    // variable for shared preferences.
+    var sharedpreferences: SharedPreferences? = null
+
 
     private lateinit var binding: FragmentSignupBinding
 
@@ -59,6 +77,7 @@ class SignupFragment : Fragment(), ServiceGenerator, Encryption {
         return (binding.root)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -73,6 +92,7 @@ class SignupFragment : Fragment(), ServiceGenerator, Encryption {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ResourceAsColor")
     private fun submitSignUp() {
         deActivateIputation()
@@ -124,12 +144,9 @@ class SignupFragment : Fragment(), ServiceGenerator, Encryption {
 
             }
             else -> {
-//                val decryptedText = encryption.decrypt(secretKey,"17f1c612c0d5fd97d519f6038810d048")
-//                binding.userExist.text=decryptedText.toString()
-//                  password = encryption.encrypt(secretKey,password).toString()
-//                  secretCode=encryption.encrypt(secretKey,secretCode).toString()
-                //sendToServer(email, password, secretCode)
-
+                password = Encryption.encrypt(password, encodedBase64Key)
+                secretCode = Encryption.encrypt(secretCode, encodedBase64Key)
+                sendToServer(email, password, secretCode)
             }
         }
 
@@ -156,7 +173,6 @@ class SignupFragment : Fragment(), ServiceGenerator, Encryption {
         json.put("email", email)
         json.put("password", password)
         json.put("secretCode", secretCode)
-        json.put("isLogged", true)
 
         val jsonOBjectString = json.toString()
         val requestBody = jsonOBjectString.toRequestBody("application/json".toMediaTypeOrNull())
@@ -173,7 +189,7 @@ class SignupFragment : Fragment(), ServiceGenerator, Encryption {
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
 
-                        handleData(response.body())
+                        handleResponse(response.body(), email)
 
                     } else {
 
@@ -187,7 +203,7 @@ class SignupFragment : Fragment(), ServiceGenerator, Encryption {
 
     }
 
-    private fun handleData(responseBody: responseMessage?) {
+    private fun handleResponse(responseBody: responseMessage?, email: String) {
         if (responseBody != null) {
             if (responseBody.message == "User already exists") {
                 binding.userExist.text = getString(R.string.userExist)
@@ -197,6 +213,12 @@ class SignupFragment : Fragment(), ServiceGenerator, Encryption {
                 activateIputation()
 
             } else {
+                sharedpreferences =
+                    view?.context?.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+                val editor = sharedpreferences?.edit()
+                editor?.putString(EMAIL_KEY, email)
+                editor?.apply()
+
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(view?.context, responseBody.message, Toast.LENGTH_SHORT)
                     .show()

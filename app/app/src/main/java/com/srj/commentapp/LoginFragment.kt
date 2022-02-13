@@ -1,6 +1,8 @@
 package com.srj.commentapp
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
@@ -24,6 +26,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
+
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -40,10 +43,20 @@ class LoginFragment : Fragment(), ServiceGenerator, Encryption {
     private var param2: String? = null
 
     private lateinit var binding: FragmentLoginBinding
-    var secretKey = "mustbe16byteskey"
+    var secretKey = "R#Q9DtjzHMFen&C*"
 
     @RequiresApi(Build.VERSION_CODES.O)
     var encodedBase64Key: String = encodeKey(secretKey)
+    val SHARED_PREFS = "shared_prefs"
+
+    // key for storing email.
+    val EMAIL_KEY = "email_key"
+
+    // key for storing password.
+    val PASSWORD_KEY = "password_key"
+
+    // variable for shared preferences.
+    var sharedpreferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +79,11 @@ class LoginFragment : Fragment(), ServiceGenerator, Encryption {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        // in shared prefs inside het string method
+        // we are passing key value as EMAIL_KEY and
+        // default value is
+        // set to null if not present.
 
         binding.btnsignIn.setOnClickListener {
             validateInput()
@@ -123,9 +141,8 @@ class LoginFragment : Fragment(), ServiceGenerator, Encryption {
 
             }
         }
-
-
     }
+
 
     private fun sendToServer(email: String, password: String) {
         val service = retrofit.create(APIservice::class.java)
@@ -144,7 +161,7 @@ class LoginFragment : Fragment(), ServiceGenerator, Encryption {
                 if (response.isSuccessful) {
                     binding.progressBar1.isEnabled = false
                     binding.progressBar1.visibility = View.GONE
-                    handleResponse(response.body())
+                    handleResponse(response.body(), email, password)
                 }
             }
         }
@@ -162,10 +179,16 @@ class LoginFragment : Fragment(), ServiceGenerator, Encryption {
         binding.btnsignIn.isEnabled = true
     }
 
-    private fun handleResponse(response: responseMessage?) {
+    private fun handleResponse(response: responseMessage?, email: String, password: String) {
 
         if (response != null) {
             if (response.message == "Successfully logged in!") {
+                sharedpreferences =
+                    view?.context?.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+                val editor = sharedpreferences?.edit()
+                editor?.putString(EMAIL_KEY, email);
+                // to save our data with key and value.
+                editor?.apply();
                 navigateToHomePage()
             } else {
                 activateInputation()
