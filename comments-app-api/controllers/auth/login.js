@@ -1,6 +1,6 @@
 const User = require('../../database/schemas/User')
 var CryptoJS = require("crypto-js");
-var encryptedBase64Key = 'bXVzdGJlMTZieXRlc2tleQ==';
+var encryptedBase64Key = 'UiNROUR0anpITUZlbiZDKg==';
 var parsedBase64Key = CryptoJS.enc.Base64.parse(encryptedBase64Key);
 const login = async (req, res) => {
     const isSignuped = await User.countDocuments({ email: req.body.email }, { limit: 1 })
