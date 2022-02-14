@@ -13,3 +13,6 @@ The available endpoints:
 - `auth/logout` (POST) : This would change `isLogged` to `false`.
 - `post-comment` (POST) : This would take in `email` and the `comment` and creates a new comment.
 - `view-comments` (GET) : This returns all the comments.
+# Android App
+
+[Downlaod](/Comment_App.apk)
