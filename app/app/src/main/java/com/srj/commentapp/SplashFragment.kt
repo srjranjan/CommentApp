@@ -27,13 +27,10 @@ class SplashFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    // creating constant keys for shared preferences.
     private val SHARED_PREFS = "shared_prefs"
 
-    // key for storing email.
     private val EMAIL_KEY = "email_key"
 
-    // variable for shared preferences.
     private var sharedpreferences: SharedPreferences? = null
     private var email: String = ""
 

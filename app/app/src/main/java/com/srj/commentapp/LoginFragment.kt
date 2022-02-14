@@ -6,12 +6,12 @@ import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
@@ -49,13 +49,8 @@ class LoginFragment : Fragment(), ServiceGenerator, Encryption {
     var encodedBase64Key: String = encodeKey(secretKey)
     val SHARED_PREFS = "shared_prefs"
 
-    // key for storing email.
     val EMAIL_KEY = "email_key"
 
-    // key for storing password.
-    val PASSWORD_KEY = "password_key"
-
-    // variable for shared preferences.
     var sharedpreferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,11 +75,9 @@ class LoginFragment : Fragment(), ServiceGenerator, Encryption {
         super.onViewCreated(view, savedInstanceState)
 
 
-        // in shared prefs inside het string method
-        // we are passing key value as EMAIL_KEY and
-        // default value is
-        // set to null if not present.
-
+        binding.loginEmail.addTextChangedListener {
+            binding.tilEmail.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+        }
         binding.btnsignIn.setOnClickListener {
             validateInput()
         }
@@ -108,28 +101,26 @@ class LoginFragment : Fragment(), ServiceGenerator, Encryption {
                 binding.tilEmail.error = "Please enter email"
                 activateInputation()
 
-                Handler().postDelayed(
-                    {
-                        binding.tilEmail.boxStrokeErrorColor =
-                            ColorStateList.valueOf(R.color.teal_200)
-                        binding.tilEmail.error = null
-                        binding.tilEmail.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
-                    }, 5000
-                )
+                binding.loginEmail.addTextChangedListener {
+
+                    binding.tilEmail.boxStrokeErrorColor =
+                        ColorStateList.valueOf(R.color.teal_200)
+                    binding.tilEmail.error = null
+                    binding.tilEmail.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                }
             }
             password.isBlank() -> {
                 binding.tilPassword.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
                 binding.tilPassword.error = "Please enter password"
                 activateInputation()
-                Handler().postDelayed(
-                    {
-                        binding.tilPassword.boxStrokeErrorColor =
-                            ColorStateList.valueOf(R.color.teal_200)
-                        binding.tilPassword.error = null
-                        binding.tilPassword.endIconMode =
-                            TextInputLayout.END_ICON_PASSWORD_TOGGLE
-                    }, 5000
-                )
+                binding.loginPassword.addTextChangedListener {
+                    binding.tilPassword.boxStrokeErrorColor =
+                        ColorStateList.valueOf(R.color.teal_200)
+                    binding.tilPassword.error = null
+                    binding.tilPassword.endIconMode =
+                        TextInputLayout.END_ICON_PASSWORD_TOGGLE
+
+                }
             }
 
             else -> {

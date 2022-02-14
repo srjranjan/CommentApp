@@ -66,9 +66,10 @@
 
         app:boxCornerRadiusTopEnd="10dp"
         app:boxCornerRadiusTopStart="10dp"
-
         app:boxStrokeColor="@color/purple_200"
+
         app:boxStrokeWidth="1dp"
+        app:endIconTint="@color/teal_200"
         app:hintAnimationEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

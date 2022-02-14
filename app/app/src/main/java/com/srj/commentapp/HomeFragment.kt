@@ -1,14 +1,24 @@
 package com.srj.commentapp
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputLayout
+import com.srj.commentapp.R.color.red
+import com.srj.commentapp.R.color.teal_200
+import com.srj.commentapp.R.string.empty
 import com.srj.commentapp.databinding.FragmentHomeBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,12 +46,9 @@ class HomeFragment : Fragment(), ServiceGenerator {
     lateinit var binding: FragmentHomeBinding
     val SHARED_PREFS = "shared_prefs"
 
-    // key for storing email.
     val EMAIL_KEY = "email_key"
 
-    // key for storing password.
 
-    // variable for shared preferences.
     var sharedpreferences: SharedPreferences? = null
 
     var email: String = ""
@@ -65,20 +72,53 @@ class HomeFragment : Fragment(), ServiceGenerator {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getComments()
+        sharedpreferences =
+            view.context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+        binding.commentEditText.addTextChangedListener {
+            binding.textInputLayout4.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+        }
 
+        binding.logout.setOnClickListener {
+            val editor: SharedPreferences.Editor? = sharedpreferences?.edit()
+            editor?.clear()
+            editor?.apply()
+            val directions = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
+            findNavController().navigate(directions)
+        }
         binding.submit.setOnClickListener {
 
-            sharedpreferences =
-                view.context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
 
             email = sharedpreferences?.getString(EMAIL_KEY, null).toString()
             val comment = binding.commentEditText.text.toString()
             deActivateInput()
-            submitComment(
-                email,
-                comment
-            )
+            if (validateInput(comment))
+                submitComment(
+                    email,
+                    comment
+                )
         }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private fun validateInput(comment: String): Boolean {
+        var result = false
+        when {
+
+            comment.isBlank() -> {
+                binding.textInputLayout4.boxStrokeErrorColor = ColorStateList.valueOf(red)
+
+                binding.textInputLayout4.error = getString(empty)
+                activateInput()
+                binding.commentEditText.addTextChangedListener {
+                    binding.textInputLayout4.boxStrokeErrorColor =
+                        ColorStateList.valueOf(teal_200)
+                    binding.textInputLayout4.error = null
+                }
+            }
+            else -> result = true
+        }
+        return result
     }
 
     private fun deActivateInput() {
@@ -132,7 +172,7 @@ class HomeFragment : Fragment(), ServiceGenerator {
         if (body != null) {
             if (body.message == "Successfully created a new comment") {
                 activateInput()
-                //getComments()
+                getComments()
             }
             val email = body.email
             val comment = body.comment
@@ -142,7 +182,35 @@ class HomeFragment : Fragment(), ServiceGenerator {
     }
 
     private fun getComments() {
-        TODO("Not yet implemented")
+        val serviceGenerator = retrofit.create(APIservice::class.java)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = serviceGenerator.viewComment()
+                withContext(Dispatchers.Main)
+                {
+                    if (response.isSuccessful) {
+                        Log.d(TAG, response.message())
+                        initRecylerview(response.body())
+                    } else {
+                        Log.d(TAG, response.message())
+                        Toast.makeText(view?.context, response.message(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d(TAG, e.message.toString())
+
+            }
+
+        }
+    }
+
+    private fun initRecylerview(body: List<CommentModal>?) {
+        Log.d(TAG, body.toString())
+        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(view?.context)
+        binding.recyclerView.layoutManager = layoutManager
+        val adapter = CommentsRecyclerAdapter(body)
+        binding.recyclerView.adapter = adapter
     }
 
     companion object {

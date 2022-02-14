@@ -16,5 +16,7 @@
     <string name="this_is_some_random_comment">this is some random comment</string>
     <string name="user_exist">User already exist, Please sign in</string>
     <string name="userExist">User Already Exist, Please Sign In</string>
+    <string name="empty">This cannot be Empty!!</string>
+    <string name="user">Username: </string>
 
 </resources>

@@ -6,13 +6,13 @@ import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT
@@ -44,13 +44,10 @@ class SignupFragment : Fragment(), ServiceGenerator, Encryption {
     var encodedBase64Key: String = Encryption.encodeKey(secretKey)
     val SHARED_PREFS = "shared_prefs"
 
-    // key for storing email.
     val EMAIL_KEY = "email_key"
 
-    // key for storing password.
     val PASSWORD_KEY = "password_key"
 
-    // variable for shared preferences.
     var sharedpreferences: SharedPreferences? = null
 
 
@@ -81,6 +78,11 @@ class SignupFragment : Fragment(), ServiceGenerator, Encryption {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.Email.addTextChangedListener {
+            binding.textInputLayout.endIconMode = END_ICON_CLEAR_TEXT
+
+        }
+
         binding.tvSignIn.setOnClickListener {
             navigateToSignIn()
         }
@@ -107,41 +109,39 @@ class SignupFragment : Fragment(), ServiceGenerator, Encryption {
                 binding.textInputLayout.error = "Please enter email"
                 activateIputation()
 
-                Handler().postDelayed(
-                    {
-                        binding.textInputLayout.boxStrokeErrorColor =
-                            ColorStateList.valueOf(R.color.teal_200)
-                        binding.textInputLayout.error = null
-                        binding.textInputLayout.endIconMode = END_ICON_CLEAR_TEXT
-                    }, 5000
-                )
+                binding.Email.addTextChangedListener {
+
+                    binding.textInputLayout.boxStrokeErrorColor =
+                        ColorStateList.valueOf(R.color.teal_200)
+                    binding.textInputLayout.error = null
+                    binding.textInputLayout.endIconMode = END_ICON_CLEAR_TEXT
+
+                }
             }
             password.isBlank() -> {
                 binding.textInputLayout2.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
                 binding.textInputLayout2.error = "Please enter password"
                 activateIputation()
-                Handler().postDelayed(
-                    {
-                        binding.textInputLayout2.boxStrokeErrorColor =
-                            ColorStateList.valueOf(R.color.teal_200)
-                        binding.textInputLayout2.error = null
-                        binding.textInputLayout2.endIconMode = END_ICON_PASSWORD_TOGGLE
-                    }, 5000
-                )
+                binding.password.addTextChangedListener {
+                    binding.textInputLayout2.boxStrokeErrorColor =
+                        ColorStateList.valueOf(R.color.teal_200)
+                    binding.textInputLayout2.error = null
+                    binding.textInputLayout2.endIconMode = END_ICON_PASSWORD_TOGGLE
+
+                }
             }
             secretCode.isBlank() -> {
                 binding.textInputLayout3.boxStrokeErrorColor = ColorStateList.valueOf(R.color.red)
                 binding.textInputLayout3.error = "PLease enter secret code"
                 activateIputation()
-                Handler().postDelayed(
-                    {
-                        binding.textInputLayout3.boxStrokeErrorColor =
-                            ColorStateList.valueOf(R.color.teal_200)
-                        binding.textInputLayout3.error = null
-                        binding.textInputLayout3.endIconMode = END_ICON_PASSWORD_TOGGLE
-                    }, 5000
-                )
+                binding.secretCode.addTextChangedListener {
 
+                    binding.textInputLayout3.boxStrokeErrorColor =
+                        ColorStateList.valueOf(R.color.teal_200)
+                    binding.textInputLayout3.error = null
+                    binding.textInputLayout3.endIconMode = END_ICON_PASSWORD_TOGGLE
+
+                }
             }
             else -> {
                 password = Encryption.encrypt(password, encodedBase64Key)

@@ -1,7 +1,11 @@
 package com.srj.commentapp
 
 data class CommentModal(
-    val email: String, val comments: String
+    var comment: String, val email: String
+)
+
+data class PasswordModal(
+    val password: String
 )
 
 data class responseMessage(
