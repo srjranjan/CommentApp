@@ -1,4 +1,4 @@
-package com.srj.commentapp;
+package com.srj.commentapp.utils;
 
 import android.os.Build;
 

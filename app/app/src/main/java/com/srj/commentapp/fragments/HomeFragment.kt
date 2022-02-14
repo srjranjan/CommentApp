@@ -1,4 +1,4 @@
-package com.srj.commentapp
+package com.srj.commentapp.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -16,10 +16,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
+import com.srj.commentapp.CommentModal
+import com.srj.commentapp.HomeFragmentDirections
 import com.srj.commentapp.R.color.red
 import com.srj.commentapp.R.color.teal_200
 import com.srj.commentapp.R.string.empty
+import com.srj.commentapp.adapters.CommentsRecyclerAdapter
 import com.srj.commentapp.databinding.FragmentHomeBinding
+import com.srj.commentapp.postComment
+import com.srj.commentapp.utils.APIservice
+import com.srj.commentapp.utils.ServiceGenerator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

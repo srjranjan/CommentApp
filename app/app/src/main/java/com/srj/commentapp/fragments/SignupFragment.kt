@@ -1,4 +1,4 @@
-package com.srj.commentapp
+package com.srj.commentapp.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,6 +18,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT
 import com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE
 import com.srj.commentapp.databinding.FragmentSignupBinding
+import com.srj.commentapp.utils.APIservice
+import com.srj.commentapp.utils.Encryption
+import com.srj.commentapp.utils.ServiceGenerator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +40,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [SignupFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SignupFragment : Fragment(), ServiceGenerator, Encryption {
+class SignupFragment : Fragment(), ServiceGenerator,
+    Encryption {
     var secretKey = "R#Q9DtjzHMFen&C*"
 
     @RequiresApi(Build.VERSION_CODES.O)

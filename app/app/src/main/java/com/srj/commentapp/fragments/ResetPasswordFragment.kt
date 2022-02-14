@@ -1,4 +1,4 @@
-package com.srj.commentapp
+package com.srj.commentapp.fragments
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
@@ -16,6 +16,9 @@ import com.google.android.material.textfield.TextInputLayout
 import com.srj.commentapp.R.color.red
 import com.srj.commentapp.R.color.teal_200
 import com.srj.commentapp.databinding.FragmentResetPasswordBinding
+import com.srj.commentapp.utils.APIservice
+import com.srj.commentapp.utils.Encryption
+import com.srj.commentapp.utils.ServiceGenerator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +37,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ResetPasswordFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ResetPasswordFragment : Fragment(), ServiceGenerator, Encryption {
+class ResetPasswordFragment : Fragment(), ServiceGenerator,
+    Encryption {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null

@@ -1,4 +1,4 @@
-package com.srj.commentapp
+package com.srj.commentapp.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -15,9 +15,12 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
-import com.srj.commentapp.Encryption.encodeKey
-import com.srj.commentapp.Encryption.encrypt
 import com.srj.commentapp.databinding.FragmentLoginBinding
+import com.srj.commentapp.utils.APIservice
+import com.srj.commentapp.utils.Encryption
+import com.srj.commentapp.utils.Encryption.encodeKey
+import com.srj.commentapp.utils.Encryption.encrypt
+import com.srj.commentapp.utils.ServiceGenerator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +40,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [LoginFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class LoginFragment : Fragment(), ServiceGenerator, Encryption {
+class LoginFragment : Fragment(), ServiceGenerator,
+    Encryption {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null

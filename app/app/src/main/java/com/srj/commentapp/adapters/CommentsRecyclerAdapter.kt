@@ -1,10 +1,12 @@
-package com.srj.commentapp
+package com.srj.commentapp.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.srj.commentapp.CommentModal
+import com.srj.commentapp.R
 import com.srj.commentapp.databinding.CommentLayoutBinding
 
 class CommentsRecyclerAdapter(

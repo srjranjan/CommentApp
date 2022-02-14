@@ -1,5 +1,9 @@
-package com.srj.commentapp
+package com.srj.commentapp.utils
 
+import com.srj.commentapp.CommentModal
+import com.srj.commentapp.PasswordModal
+import com.srj.commentapp.postComment
+import com.srj.commentapp.responseMessage
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Response

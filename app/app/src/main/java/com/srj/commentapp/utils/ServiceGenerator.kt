@@ -1,4 +1,4 @@
-package com.srj.commentapp
+package com.srj.commentapp.utils
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson

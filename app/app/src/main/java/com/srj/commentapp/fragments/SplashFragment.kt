@@ -1,4 +1,4 @@
-package com.srj.commentapp
+package com.srj.commentapp.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
