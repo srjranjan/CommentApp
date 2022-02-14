@@ -182,6 +182,9 @@ class HomeFragment : Fragment(), ServiceGenerator {
     }
 
     private fun getComments() {
+        binding.progressBar2.isEnabled = true
+        binding.progressBar2.visibility = View.VISIBLE
+        deActivateInput()
         val serviceGenerator = retrofit.create(APIservice::class.java)
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -189,6 +192,9 @@ class HomeFragment : Fragment(), ServiceGenerator {
                 val response = serviceGenerator.viewComment()
                 withContext(Dispatchers.Main)
                 {
+                    binding.progressBar2.isEnabled = false
+                    binding.progressBar2.visibility = View.GONE
+                    activateInput()
                     if (response.isSuccessful) {
                         Log.d(TAG, response.message())
                         initRecylerview(response.body())
