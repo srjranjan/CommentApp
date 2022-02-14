@@ -73,6 +73,7 @@ class HomeFragment : Fragment(), ServiceGenerator {
 
             email = sharedpreferences?.getString(EMAIL_KEY, null).toString()
             val comment = binding.commentEditText.text.toString()
+            deActivateInput()
             submitComment(
                 email,
                 comment
@@ -80,7 +81,23 @@ class HomeFragment : Fragment(), ServiceGenerator {
         }
     }
 
+    private fun deActivateInput() {
+        binding.submit.isEnabled = false
+        binding.textInputLayout4.isEnabled = false
+        binding.commentEditText.isEnabled = false
+        binding.commentEditText.text?.clear()
+    }
+
+    private fun activateInput() {
+        binding.submit.isEnabled = true
+        binding.textInputLayout4.isEnabled = true
+        binding.commentEditText.isEnabled = true
+
+    }
+
     private fun submitComment(email: String?, comment: String) {
+        binding.progressBar2.isActivated = true
+        binding.progressBar2.visibility = View.VISIBLE
 
         val serviceGenerator = retrofit.create(APIservice::class.java)
         val json = JSONObject()
@@ -95,6 +112,7 @@ class HomeFragment : Fragment(), ServiceGenerator {
                 withContext(Dispatchers.Main)
                 {
                     if (response.isSuccessful) {
+                        binding.progressBar2.visibility = View.GONE
                         Log.d(TAG, response.message())
                         handleResponse(response.body())
                     } else {
@@ -112,11 +130,19 @@ class HomeFragment : Fragment(), ServiceGenerator {
 
     private fun handleResponse(body: postComment?) {
         if (body != null) {
+            if (body.message == "Successfully created a new comment") {
+                activateInput()
+                //getComments()
+            }
             val email = body.email
             val comment = body.comment
             val message = body.message
             Log.d(TAG, "$email  , $comment , $message")
         }
+    }
+
+    private fun getComments() {
+        TODO("Not yet implemented")
     }
 
     companion object {
