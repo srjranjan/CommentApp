@@ -26,6 +26,7 @@ Android APK [Downlaod](/Comment_App.apk)
 - **Comment app** is built using  [**Kotlin**](https://kotlinlang.org/). 
 - It is `single activity` based architecture which uses  `Retrofit` lilbrary for networking and `moshi` for GSON converter. 
 - `Jetpack navigation` is also used to navigate between fragments. `ViewBinding` is used instead of expensive `findviewById`.
+- encryption and decryption of sensitive info.
 
 
 ## Backend
@@ -34,7 +35,14 @@ Android APK [Downlaod](/Comment_App.apk)
 
 - [**NodeJS**](https://nodejs.org/) - Runtime environment
 - [**Express**](https://expressjs.com/) - Framework used to build the API
-- [**MongoDB**](https://mongodb.com/) - No SQL database which is used for the storing the todo
+- [**MongoDB**](https://mongodb.com/) - No SQL database which is used for the storing the Comments and userDetails
 - [**Mongoose**](https://mongoosejs.com/) - Library which is used to interact with the MongoDB database 
 - [**Deta**]( https://deta.sh/ ) - Platform where the API is been hosted
+
+**Video  DEMO**
+
+https://user-images.githubusercontent.com/51962638/153833797-ecd788e2-8a44-455c-a50d-ff043513ce90.mp4
+
+
+
 
