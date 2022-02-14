@@ -22,7 +22,7 @@ interface APIservice {
     suspend fun forgotPassword(@Body request: RequestBody): Response<ResponseBody>
 
     @POST("/post-comment")
-    suspend fun submitComment(@Body request: RequestBody): Response<ResponseBody>
+    suspend fun submitComment(@Body request: RequestBody): Response<postComment>
 
     @GET("/view-comments")
     suspend fun viewComment(): Response<List<CommentModal>>

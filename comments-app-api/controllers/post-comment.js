@@ -17,10 +17,9 @@ const postComment = async (req, res) => {
         newComment.save()
         res.json({
             "message": "Successfully created a new comment",
-            "comment": {
-                email: req.body.email,
-                comment: req.body.comment
-            }
+            "email": req.body.email,
+            "comment": req.body.comment
+            
         })
     }
 }

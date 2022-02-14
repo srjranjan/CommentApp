@@ -8,7 +8,7 @@ const signup = async (req, res) => {
             email: req.body.email,
             password: req.body.password,
             secretCode: req.body.secretCode,
-            isLogged: req.body.isLogged
+            isLogged: true
         })
         newUser.save()
         res.json({
