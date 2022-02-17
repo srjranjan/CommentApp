@@ -16,13 +16,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
-import com.srj.commentapp.CommentModal
-import com.srj.commentapp.HomeFragmentDirections
 import com.srj.commentapp.R.color.red
 import com.srj.commentapp.R.color.teal_200
 import com.srj.commentapp.R.string.empty
 import com.srj.commentapp.adapters.CommentsRecyclerAdapter
 import com.srj.commentapp.databinding.FragmentHomeBinding
+import com.srj.commentapp.modals.TestJsonClass
 import com.srj.commentapp.postComment
 import com.srj.commentapp.utils.APIservice
 import com.srj.commentapp.utils.ServiceGenerator
@@ -217,11 +216,11 @@ class HomeFragment : Fragment(), ServiceGenerator {
         }
     }
 
-    private fun initRecylerview(body: List<CommentModal>?) {
+    private fun initRecylerview(body: TestJsonClass?) {
         Log.d(TAG, body.toString())
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(view?.context)
         binding.recyclerView.layoutManager = layoutManager
-        val adapter = CommentsRecyclerAdapter(body)
+        val adapter = body?.let { CommentsRecyclerAdapter(it) }
         binding.recyclerView.adapter = adapter
     }
 

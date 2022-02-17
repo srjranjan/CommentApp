@@ -15,7 +15,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
+import com.srj.commentapp.R
 import com.srj.commentapp.databinding.FragmentLoginBinding
+import com.srj.commentapp.responseMessage
 import com.srj.commentapp.utils.APIservice
 import com.srj.commentapp.utils.Encryption
 import com.srj.commentapp.utils.Encryption.encodeKey
@@ -156,7 +158,7 @@ class LoginFragment : Fragment(), ServiceGenerator,
                 if (response.isSuccessful) {
                     binding.progressBar1.isEnabled = false
                     binding.progressBar1.visibility = View.GONE
-                    handleResponse(response.body(), email, password)
+                    handleResponse(response.body(), email)
                 }
             }
         }
@@ -174,7 +176,7 @@ class LoginFragment : Fragment(), ServiceGenerator,
         binding.btnsignIn.isEnabled = true
     }
 
-    private fun handleResponse(response: responseMessage?, email: String, password: String) {
+    private fun handleResponse(response: responseMessage?, email: String) {
 
         if (response != null) {
             if (response.message == "Successfully logged in!") {

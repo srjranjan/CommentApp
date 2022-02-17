@@ -17,7 +17,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT
 import com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE
+import com.srj.commentapp.R
 import com.srj.commentapp.databinding.FragmentSignupBinding
+import com.srj.commentapp.responseMessage
 import com.srj.commentapp.utils.APIservice
 import com.srj.commentapp.utils.Encryption
 import com.srj.commentapp.utils.ServiceGenerator

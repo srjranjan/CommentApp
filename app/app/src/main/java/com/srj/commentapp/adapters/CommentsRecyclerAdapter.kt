@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.srj.commentapp.CommentModal
 import com.srj.commentapp.R
 import com.srj.commentapp.databinding.CommentLayoutBinding
+import com.srj.commentapp.modals.TestJsonClass
 
 class CommentsRecyclerAdapter(
-    private var commentModal: List<CommentModal>?,
+    private var commentModal: TestJsonClass
 ) : RecyclerView.Adapter<CommentsRecyclerAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: CommentLayoutBinding) :
@@ -19,8 +19,8 @@ class CommentsRecyclerAdapter(
         init {
             binding.root.setOnClickListener {
                 val position = adapterPosition
-                val email = commentModal?.get(itemCount - (position + 1))?.email
-                val comment = commentModal?.get(itemCount - (position + 1))?.comment
+                val email = commentModal[itemCount - (position + 1)].email
+                val comment = commentModal[itemCount - (position + 1)].comment
                 Toast.makeText(itemView.context, "$email \n $comment ", Toast.LENGTH_SHORT).show()
             }
         }
@@ -38,11 +38,11 @@ class CommentsRecyclerAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.email.text =
-            holder.itemView.context.getString(R.string.user) + " " + commentModal?.get(itemCount - (position + 1))?.email
-        holder.binding.comments.text = commentModal?.get(itemCount - (position + 1))?.comment
+            holder.itemView.context.getString(R.string.user) + " " + commentModal[itemCount - (position + 1)].email
+        holder.binding.comments.text = commentModal[itemCount - (position + 1)].comment
     }
 
     override fun getItemCount(): Int {
-        return commentModal!!.size
+        return commentModal.size
     }
 }

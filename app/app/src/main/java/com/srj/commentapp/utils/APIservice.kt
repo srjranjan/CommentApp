@@ -1,7 +1,7 @@
 package com.srj.commentapp.utils
 
-import com.srj.commentapp.CommentModal
 import com.srj.commentapp.PasswordModal
+import com.srj.commentapp.modals.TestJsonClass
 import com.srj.commentapp.postComment
 import com.srj.commentapp.responseMessage
 import okhttp3.RequestBody
@@ -32,7 +32,7 @@ interface APIservice {
 
     @Headers("Content-Type:application/json")
     @GET("/view-comments")
-    suspend fun viewComment(): Response<List<CommentModal>>
+    suspend fun viewComment(): Response<TestJsonClass>
 
 
 }

@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputLayout
+import com.srj.commentapp.PasswordModal
 import com.srj.commentapp.R.color.red
 import com.srj.commentapp.R.color.teal_200
 import com.srj.commentapp.databinding.FragmentResetPasswordBinding
